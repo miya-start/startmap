@@ -1,6 +1,6 @@
-# fly.toml file generated for frosty-waterfall-680 on 2022-02-22T21:36:27+09:00
+# fly.toml file generated for dawn-glade-1080 on 2022-02-25T17:22:00+09:00
 
-app = "frosty-waterfall-680"
+app = "dawn-glade-1080"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
