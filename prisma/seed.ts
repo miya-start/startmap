@@ -16,6 +16,19 @@ async function main() {
     },
   })
 
+  await prisma.user.create({
+    data: {
+      name: 'Bob',
+      email: 'bob@prisma.io',
+      posts: {
+        create: { title: 'Lorem ipsum' },
+      },
+      profile: {
+        create: { bio: 'I like birds' },
+      },
+    },
+  })
+
   const allUsers = await prisma.user.findMany({
     include: {
       posts: true,
