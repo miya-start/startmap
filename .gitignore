@@ -2,8 +2,10 @@ node_modules
 
 /.cache
 /build
-/server/build
+/coverage
 /public/build
+/server/build
+
 .env
 
 .DS_Store

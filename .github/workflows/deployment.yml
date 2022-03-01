@@ -6,6 +6,33 @@ on:
     branches: [main]
 
 jobs:
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛑 Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Copy test env vars
+        run: cp .env.test .env
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Download deps
+        uses: bahmutov/npm-install@v1
+
+      - name: 🐳 Docker compose
+        run: docker-compose up -d && sleep 3 && npx prisma migrate reset --force
+
+      - name: Run jest
+        run: npm run test -- --coverage
+
   deploy:
     name: 🚀 Deploy
     runs-on: ubuntu-latest
