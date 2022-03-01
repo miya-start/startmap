@@ -16,9 +16,6 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Copy test env vars
-        run: cp .env.test .env
-
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -26,9 +23,6 @@ jobs:
 
       - name: Download deps
         uses: bahmutov/npm-install@v1
-
-      - name: 🐳 Docker compose
-        run: docker-compose up -d && sleep 3 && npx prisma migrate reset --force
 
       - name: Run jest
         run: npm run test -- --coverage
