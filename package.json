@@ -15,8 +15,8 @@
     "start": "cross-env NODE_ENV=production remix-serve build",
     "docker:up": "docker-compose up -d && sleep 3",
     "docker:down": "docker-compose down",
-    "test": "npm run docker:up && dotenv -e .env.test -- npx prisma migrate reset --force && dotenv -e .env.test -- jest -i",
-    "test:watch": "npm run docker:up && dotenv -e .env.test -- npx prisma migrate reset --force && dotenv -e .env.test -- jest --watch"
+    "test": "npm run docker:up && jest",
+    "test:watch": "npm run docker:up && jest --watch"
   },
   "dependencies": {
     "@prisma/client": "^3.10.0",

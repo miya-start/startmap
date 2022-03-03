@@ -24,6 +24,7 @@ afterAll(async () => {
   await db.$transaction([deletePosts, deleteProfiles, deleteUsers])
   await db.$disconnect()
   await db.$queryRawUnsafe<[]>(`DROP SCHEMA ${schema} CASCADE`)
+
   console.log('DATABASE_URL', process.env.DATABASE_URL)
 })
 
