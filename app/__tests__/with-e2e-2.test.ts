@@ -1,14 +1,27 @@
 import { execSync } from 'child_process'
 import { randomBytes } from 'crypto'
+import type { Prisma, PrismaClient } from '@prisma/client'
 import { createUser, updateUsername } from '../test/functions-without-context'
-import { db, renewDb } from '~/utils/db.server'
+import { renewDb } from '~/utils/db.server'
 import { prisma, Profile, User, Post } from '@prisma/client'
 
 let schema: string
+let db: PrismaClient<
+  Prisma.PrismaClientOptions,
+  never,
+  Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+>
 beforeAll(async () => {
   schema = 'a' + randomBytes(4).toString('hex')
   process.env.DATABASE_URL = `${process.env.DATABASE_URL}?schema=${schema}`
   console.log('DATABASE_URL', process.env.DATABASE_URL)
+
+  db = await import('~/utils/db.server')
+    .then((m) => m.db)
+    .catch((e) => {
+      console.error(e)
+      process.exit(1)
+    })
 
   execSync(
     `DATABASE_URL=${process.env.DATABASE_URL} npx prisma migrate reset --force`
@@ -24,7 +37,6 @@ afterAll(async () => {
   await db.$transaction([deletePosts, deleteProfiles, deleteUsers])
   await db.$disconnect()
   await db.$queryRawUnsafe<[]>(`DROP SCHEMA ${schema} CASCADE`)
-
   console.log('DATABASE_URL', process.env.DATABASE_URL)
 })
 
