@@ -27,7 +27,6 @@ RUN npm prune --production
 FROM base as build
 
 ENV NODE_ENV=production
-ENV DATABASE_URL=postgres://postgres:e4c9c181d5c65c7cdad5db1c7ab3fcaa20e14c9c01c287ee@dawn-glade-1080-db.internal:5432/startmap
 
 RUN mkdir /app
 WORKDIR /app
@@ -39,7 +38,6 @@ ADD prisma .
 RUN npx prisma generate
 
 ADD . .
-RUN npx prisma migrate reset --force
 RUN npm run build
 
 # Finally, build the production image with minimal footprint

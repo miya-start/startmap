@@ -1,6 +1,6 @@
-# fly.toml file generated for dawn-glade-1080 on 2022-02-25T17:22:00+09:00
+# fly.toml file generated for dry-hill-3417 on 2022-03-04T15:45:10+09:00
 
-app = "dawn-glade-1080"
+app = "dry-hill-3417"
 
 kill_signal = "SIGINT"
 kill_timeout = 5

@@ -3,10 +3,12 @@ node_modules
 /.cache
 /build
 /coverage
+/prisma/seed.js
 /public/build
 /server/build
 
 .env
+.env.production
 
 .DS_Store
 .dccache

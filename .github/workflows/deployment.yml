@@ -24,6 +24,9 @@ jobs:
       - name: Download deps
         uses: bahmutov/npm-install@v1
 
+      - name: Prepare seed
+        run: npm run seed
+
       - name: Run jest
         run: npm run test -- --coverage
 
