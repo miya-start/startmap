@@ -16,9 +16,9 @@
     "start": "cross-env NODE_ENV=production remix-serve build",
     "docker:up": "docker-compose up -d && sleep 3",
     "docker:down": "docker-compose down",
-    "seed": "swc prisma/seed.ts -d prisma",
+    "seed": "swc prisma/seed.ts -d prisma -C module.type=commonjs",
     "seed:deploy": "dotenv -e .env.production -- npx prisma migrate reset --force",
-    "seed:watch": "swc prisma/seed.ts -d prisma -w",
+    "seed:watch": "swc prisma/seed.ts -d prisma -C module.type=commonjs -w",
     "test": "npm run docker:up && jest",
     "test:watch": "npm run docker:up && jest --watch"
   },
