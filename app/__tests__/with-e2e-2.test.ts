@@ -1,9 +1,8 @@
 import { execSync } from 'child_process'
 import { randomBytes } from 'crypto'
 import type { Prisma, PrismaClient } from '@prisma/client'
-import { createUser, updateUsername } from '../test/functions-without-context'
-import { renewDb } from '~/utils/db.server'
 import { prisma, Profile, User, Post } from '@prisma/client'
+import { createUser, updateUsername } from '../test/functions-without-context'
 
 let schema: string
 let db: PrismaClient<
@@ -16,17 +15,11 @@ beforeAll(async () => {
   process.env.DATABASE_URL = `${process.env.DATABASE_URL}?schema=${schema}`
   console.log('DATABASE_URL', process.env.DATABASE_URL)
 
-  db = await import('~/utils/db.server')
-    .then((m) => m.db)
-    .catch((e) => {
-      console.error(e)
-      process.exit(1)
-    })
+  db = (await import('~/utils/db.server')).db
 
   execSync(
     `DATABASE_URL=${process.env.DATABASE_URL} npx prisma migrate reset --force`
   )
-  renewDb()
 })
 
 afterAll(async () => {

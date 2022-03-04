@@ -3,7 +3,7 @@ module.exports = {
   moduleNameMapper: {
     '^~/(.*)$': '<rootDir>/app/$1',
   },
-  setupFiles: ['dotenv/config'],
+  setupFiles: ['<rootDir>/jest.setup.ts'],
   testEnvironment: 'node',
   testMatch: ['**/*.test.ts'],
   transform: {
