@@ -1,7 +1,18 @@
+Dockerfile
 node_modules
 
+/.cache
+/build
+/coverage
 /prisma/seed.js
+/public/build
+/server/build
+
+/cypress/videos
+/cypress/screenshots
 
 .env
 .env.production
 
+.DS_Store
+.dccache
