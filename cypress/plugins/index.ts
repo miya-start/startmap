@@ -9,14 +9,12 @@ export default (
   const configOverrides: Partial<Cypress.PluginConfigOptions> = {
     viewportWidth: 1030,
     viewportHeight: 800,
-    video: !process.env.CI,
-    screenshotOnRunFailure: !process.env.CI,
   }
   Object.assign(config, configOverrides)
 
   on('task', {
     async 'db:seed'() {
-      console.log('db:seed', process.env.NODE_ENV)
+      console.log('db:seed', process.env.CI)
       return null
     },
   })
