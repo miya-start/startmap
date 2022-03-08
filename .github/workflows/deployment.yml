@@ -11,7 +11,7 @@ jobs:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
-      - name: 🛑 Cancel Previous Runs
+      - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
 
       - name: Checkout repo
@@ -43,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         # run 3 copies of the current job in parallel
-        containers: ['🐨 Kody', '💯 Hannah', '🦉 Olivia']
+        containers: [1, 2, 3]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
@@ -62,7 +62,7 @@ jobs:
       - name: Download deps
         uses: bahmutov/npm-install@v1
 
-      - name: Prepare seed
+      - name: Prepare seed data
         run: npm run seed
 
       - name: 🐳 Docker compose
@@ -86,16 +86,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [jest, cypress]
     steps:
-      # Although I'm not building that often, so far
-      # it seems pretty useful to have in place,
-      # for example when trying to debug something you need to deploy 🧑‍🔧
-      - name: 🛑 Cancel Previous Runs
+      - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
 
-      # This step checks out a copy of your repository.
       - uses: actions/checkout@v2
 
-      # This step runs `fly(ctl) deploy`.
       - name: 🚀 Deploy
         uses: superfly/flyctl-actions@master
         env:
