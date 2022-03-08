@@ -16,12 +16,15 @@ export default function TopRoute() {
   const data = useLoaderData<LoarderData>()
 
   return (
-    <ul>
-      {data.posts.map(({ id, title }) => (
-        <li key={id}>
-          <Link to={`/posts/${id}`}>{title}</Link>
-        </li>
-      ))}
-    </ul>
+    <>
+      <h1 data-test="greeting">Welcome to Top</h1>
+      <ul>
+        {data.posts.map(({ id, title }) => (
+          <li key={id}>
+            <Link to={`/posts/${id}`}>{title}</Link>
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }

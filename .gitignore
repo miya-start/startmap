@@ -7,6 +7,9 @@ node_modules
 /public/build
 /server/build
 
+/cypress/videos
+/cypress/screenshots
+
 .env
 .env.production
 
