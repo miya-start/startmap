@@ -61,12 +61,14 @@ jobs:
       - name: Download deps
         uses: bahmutov/npm-install@v1
 
+      - name: Prepare seed
+        run: npm run seed
+
       - name: 🐳 Docker compose
         run: docker-compose up -d && sleep 3 && npx prisma migrate reset --force
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
-        continue-on-error: true
         with:
           build: npm run build
           start: npm start
