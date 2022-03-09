@@ -67,8 +67,7 @@ jobs:
           if-no-files-found: error
           path: public/build
 
-  cypress:
-    name: Cypress
+  e2e-chrome-tests:
     needs: install
     timeout-minutes: 5
     runs-on: ubuntu-latest
@@ -131,11 +130,69 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  e2e-firefox-tests:
+    needs: install
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3]
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build
+
+      - name: Download the public build folders
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public/build
+
+      - name: Copy test env vars
+        run: cp .env.test .env
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Download deps
+        uses: bahmutov/npm-install@v1
+
+      - name: Prepare seed data
+        run: npm run seed
+
+      - name: 🐳 Docker compose
+        run: docker-compose up -d && sleep 3 && npx prisma migrate reset --force
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+          wait-on: 'http://localhost:3000'
+          wait-on-timeout: 120
+          browser: firefox
+          record: true
+          parallel: true
+          group: 'UI - Firefox'
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   deploy:
     name: 🚀 Deploy
     timeout-minutes: 5
     runs-on: ubuntu-latest
-    needs: [jest, cypress]
+    needs: [jest, e2e-chrome-tests, e2e-firefox-tests]
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.1
