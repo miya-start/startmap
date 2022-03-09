@@ -31,8 +31,45 @@ jobs:
       - name: Run jest
         run: npm test -- --coverage
 
+  install:
+    name: Install
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Download deps
+        uses: bahmutov/npm-install@v1
+
+      - name: Build
+        run: npm run build
+
+      - name: Save build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          if-no-files-found: error
+          path: build
+
+      - name: Save public build folder
+        uses: actions/upload-artifact@v3
+        with:
+          name: public
+          if-no-files-found: error
+          path: public/build
+
   cypress:
     name: Cypress
+    needs: install
     timeout-minutes: 5
     runs-on: ubuntu-latest
     strategy:
@@ -50,6 +87,18 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v2
+
+      - name: Download the build folders
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build
+
+      - name: Download the public build folders
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public/build
 
       - name: Copy test env vars
         run: cp .env.test .env
@@ -71,7 +120,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: npm run build
           start: npm start
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 120
