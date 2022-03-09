@@ -7,7 +7,6 @@ on:
 
 jobs:
   jest:
-    name: Jest
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +31,6 @@ jobs:
         run: npm test -- --coverage
 
   install:
-    name: Install
     timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
